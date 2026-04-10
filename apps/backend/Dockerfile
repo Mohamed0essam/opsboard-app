@@ -15,7 +15,7 @@ ENV NODE_ENV=production
 COPY package.json package-lock.json* ./
 RUN npm install --omit=dev
 COPY --from=build /app/dist ./dist
-COPY --from=build /app/migrations ./migrations
+COPY --from=build /app/migrations ./dist/migrations
 COPY --from=build /app/scripts ./scripts
 EXPOSE 8080
 CMD ["sh", "-c", "node dist/scripts/migrate.js && node dist/src/server.js"]
