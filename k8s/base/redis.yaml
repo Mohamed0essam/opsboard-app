@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opsboard-redis
+  namespace: opsboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opsboard-redis
+  template:
+    metadata:
+      labels:
+        app: opsboard-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          args: ["redis-server", "--appendonly", "yes"]
+          ports:
+            - containerPort: 6379
+          readinessProbe:
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opsboard-redis
+  namespace: opsboard
+spec:
+  selector:
+    app: opsboard-redis
+  ports:
+    - port: 6379
+      targetPort: 6379

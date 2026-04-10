@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: opsboard-postgres
+    environment:
+      POSTGRES_DB: opsboard
+      POSTGRES_USER: opsboard
+      POSTGRES_PASSWORD: opsboard_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U opsboard -d opsboard"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: opsboard-redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+
+  opsboard-backend:
+    build:
+      context: ./apps/backend
+    container_name: opsboard-backend
+    environment:
+      NODE_ENV: development
+      APP_PORT: 8080
+      DATABASE_URL: postgresql://opsboard:opsboard_dev_password@postgres:5432/opsboard
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: change-me-in-real-environments
+      JWT_EXPIRES_IN: 1d
+      CORS_ORIGIN: http://localhost:3000
+      LOG_LEVEL: info
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./apps/frontend
+    container_name: opsboard-frontend
+    depends_on:
+      - opsboard-backend
+    ports:
+      - "3000:80"
+
+volumes:
+  postgres_data:

@@ -1,0 +1,10 @@
+name: placeholder-ci
+
+on:
+  workflow_dispatch:
+
+jobs:
+  info:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Replace this with real CI in the next phase."

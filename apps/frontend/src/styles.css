@@ -1,0 +1,171 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  background: #2563eb;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.95;
+}
+
+.shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.auth-card {
+  width: min(100%, 440px);
+}
+
+.card {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 18px;
+  padding: 1.25rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  margin-bottom: 1rem;
+}
+
+.form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+label {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  background: #0b1220;
+  color: #e2e8f0;
+  padding: 0.8rem;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.muted {
+  color: #94a3b8;
+}
+
+.error {
+  color: #fca5a5;
+  white-space: pre-wrap;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.tabs button {
+  background: #1e293b;
+}
+
+.tabs .active {
+  background: #2563eb;
+}
+
+.list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.list-item {
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 0.85rem;
+  background: #0b1220;
+}
+
+.incident-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.severity-low {
+  background: #14532d;
+}
+
+.severity-medium {
+  background: #78350f;
+}
+
+.severity-high {
+  background: #7f1d1d;
+}
+
+.severity-critical {
+  background: #881337;
+}
+
+.button-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+small {
+  color: #cbd5e1;
+}
