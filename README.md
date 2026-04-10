@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # OpsBoard
 
 OpsBoard is a realistic starter application for a DevOps portfolio project.
@@ -87,3 +88,6 @@ docker compose up --build
 - add Prometheus/Grafana/Loki
 - add PostgreSQL backup/restore jobs
 - add image scanning and rollout policies
+=======
+# opsboard-app
+>>>>>>> cc59bb7246ad9ea771b14b1ccb0be3b59590a59d
