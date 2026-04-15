@@ -1,10 +1,81 @@
-name: placeholder-ci
+name: ci-manual-dockerhub
 
 on:
   workflow_dispatch:
+    inputs:
+      image_tag:
+        description: Optional image tag override (default is short commit SHA)
+        required: false
+        type: string
 
 jobs:
-  info:
+  docker:
+    name: Build and push Docker images
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - run: echo "Replace this with real CI in the next phase."
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve image variables
+        id: vars
+        env:
+          INPUT_TAG: ${{ github.event.inputs.image_tag }}
+          USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          NAMESPACE_SECRET: ${{ secrets.DOCKERHUB_NAMESPACE }}
+          REPOSITORY: ${{ secrets.DOCKERHUB_REPOSITORY }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "$REPOSITORY" ]; then
+            echo "DOCKERHUB_REPOSITORY secret is required (example: opsboard-app-private)." >&2
+            exit 1
+          fi
+
+          if [ -n "$NAMESPACE_SECRET" ]; then
+            NAMESPACE="$NAMESPACE_SECRET"
+          else
+            NAMESPACE="$USERNAME"
+          fi
+
+          if [ -z "$NAMESPACE" ]; then
+            echo "Set DOCKERHUB_USERNAME (and optionally DOCKERHUB_NAMESPACE)." >&2
+            exit 1
+          fi
+
+          TAG="$INPUT_TAG"
+          if [ -z "$TAG" ]; then
+            TAG="${GITHUB_SHA::7}"
+          fi
+
+          echo "namespace=$NAMESPACE" >> "$GITHUB_OUTPUT"
+          echo "repository=$REPOSITORY" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./apps/backend
+          push: true
+          tags: |
+            ${{ steps.vars.outputs.namespace }}/${{ steps.vars.outputs.repository }}:backend-${{ steps.vars.outputs.tag }}
+            ${{ steps.vars.outputs.namespace }}/${{ steps.vars.outputs.repository }}:backend-latest
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./apps/frontend
+          push: true
+          tags: |
+            ${{ steps.vars.outputs.namespace }}/${{ steps.vars.outputs.repository }}:frontend-${{ steps.vars.outputs.tag }}
+            ${{ steps.vars.outputs.namespace }}/${{ steps.vars.outputs.repository }}:frontend-latest
