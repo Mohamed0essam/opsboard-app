@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: staging
+
+resources:
+  - ../base
+  - namespace.yaml
+  - backend-secret.yaml
+  - postgres-secret.yaml
+  - postgres-statefulset.yaml
+
+images:
+  - name: your-ecr-or-dockerhub/opsboard-backend
+    newName: mohamedessam0/opsboard-app
+    newTag: backend-latest
+  - name: your-ecr-or-dockerhub/opsboard-frontend
+    newName: mohamedessam0/opsboard-app
+    newTag: frontend-latest
+
+patches:
+  - path: delete-base-namespace.yaml
+  - path: delete-base-postgres-deployment.yaml
+  - path: backend-configmap-patch.yaml
+  - path: backend-deployment-patch.yaml
+  - path: frontend-deployment-patch.yaml
+  - path: ingress-patch.yaml

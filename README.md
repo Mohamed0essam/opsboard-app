@@ -9,6 +9,9 @@ OpsBoard is a starter full-stack app for DevOps portfolio work.
 - Database: PostgreSQL
 - Cache: Redis
 - Orchestration: Docker Compose
+- Kubernetes: kubeadm cluster (staging namespace)
+- CI: GitHub Actions (manual dispatch)
+- Registry: Docker Hub private repository
 
 ## What It Does
 
@@ -17,7 +20,7 @@ OpsBoard is a starter full-stack app for DevOps portfolio work.
 - incident creation and status updates
 - health/readiness and metrics endpoints
 
-## Quick Start
+## Local Quick Start
 
 ```bash
 cp apps/backend/.env.example apps/backend/.env
@@ -33,20 +36,27 @@ docker compose ps
 - Readiness: http://localhost:8080/readyz
 - Metrics: http://localhost:8080/metrics
 
-## Current Status (April 2026)
+## Kubernetes Staging
 
-The current code in this repo builds and runs successfully with Docker Compose.
+Staging manifests are under `k8s/staging`.
 
-Applied updates:
+They deploy:
 
-- fixed frontend TypeScript header typing issue in API requests
-- added missing backend `@types/pg` for TypeScript build
-- fixed backend Docker runtime migration path
-- removed obsolete `version` key from `docker-compose.yml`
+- PostgreSQL (StatefulSet + PVC)
+- Redis
+- Backend
+- Frontend
+- Services + Ingress
 
-## Next Improvements
+## Project Progress (April 2026)
 
-- add automated tests
-- add CI/CD pipeline for build, push, and smoke checks
-- move secrets to a dedicated secret manager
-- add observability and image scanning
+- Phase 1: completed (app runs with Docker Compose)
+- Phase 2: completed (containerization fixes applied)
+- Phase 3: completed (manual GitHub Actions CI builds and pushes images to Docker Hub)
+- Phase 4: completed (manual Kubernetes deployment to `staging` validated)
+- Phase 5: next (GitOps repo split + Argo CD flow)
+
+## Notes
+
+- Ingress on kubeadm can work even when `EXTERNAL-IP` is pending (using NodePort access).
+- For this learning phase, secrets are bootstrap-level and will be improved in later phases.
