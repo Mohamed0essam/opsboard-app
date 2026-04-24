@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: opsboard-backend-config
-  namespace: opsboard
-data:
-  CORS_ORIGIN: "http://opsboard-staging.local"

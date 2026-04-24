@@ -12,6 +12,7 @@ OpsBoard is a starter full-stack app for DevOps portfolio work.
 - Kubernetes: kubeadm cluster (staging namespace)
 - CI: GitHub Actions (manual dispatch)
 - Registry: Docker Hub private repository
+- GitOps repo: https://github.com/Mohamed0essam/opsboard-gitops
 
 ## What It Does
 
@@ -36,17 +37,10 @@ docker compose ps
 - Readiness: http://localhost:8080/readyz
 - Metrics: http://localhost:8080/metrics
 
-## Kubernetes Staging
+## Repository Split
 
-Staging manifests are under `k8s/staging`.
-
-They deploy:
-
-- PostgreSQL (StatefulSet + PVC)
-- Redis
-- Backend
-- Frontend
-- Services + Ingress
+- `opsboard-app` (this repo): application source code, Dockerfiles, CI workflow
+- `opsboard-gitops`: Kubernetes manifests and Argo CD application definitions
 
 ## Project Progress (April 2026)
 
@@ -54,7 +48,7 @@ They deploy:
 - Phase 2: completed (containerization fixes applied)
 - Phase 3: completed (manual GitHub Actions CI builds and pushes images to Docker Hub)
 - Phase 4: completed (manual Kubernetes deployment to `staging` validated)
-- Phase 5: next (GitOps repo split + Argo CD flow)
+- Phase 5: in progress (GitOps repo split completed, Argo CD flow next)
 
 ## Notes
 
